@@ -159,7 +159,7 @@ export class IsomorphicGit extends GitManager {
                 git.statusMatrix({ ...this.getRepo() })
             );
 
-            const chunkSize = 1000; // Process 1000 files at a time
+            const chunkSize = this.plugin.settings.mobileOptimization.maxFilesToProcess; // Process files in chunks
             const status: FileStatusResult[] = [];
             for (let i = 0; i < statusMatrix.length; i += chunkSize) {
                 const chunk = statusMatrix.slice(i, i + chunkSize);
@@ -788,7 +788,7 @@ export class IsomorphicGit extends GitManager {
 
         return Promise.all(
             logs.map(async (log) => {
-                const completeMessage = log.commit.message.split("\\n\\n");
+                const completeMessage = log.commit.message.split("\\\n\\\n");
 
                 return {
                     message: completeMessage[0],
@@ -796,7 +796,7 @@ export class IsomorphicGit extends GitManager {
                         name: log.commit.author.name,
                         email: log.commit.author.email,
                     },
-                    body: completeMessage.slice(1).join("\\n\\n"),
+                    body: completeMessage.slice(1).join("\\\n\\\n"),
                     date: new Date(
                         log.commit.committer.timestamp
                     ).toDateString(),

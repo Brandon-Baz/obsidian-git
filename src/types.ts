@@ -52,7 +52,7 @@ export interface ObsidianGitSettings {
     lineAuthor: LineAuthorSettings;
     mobileOptimization: {
         enable: boolean;
-        maxFilesProcessed: number;
+        maxFilesToProcess: number;
         aggressiveCaching: boolean;
         disableResourceIntensiveFeatures: boolean;
     };

@@ -160,6 +160,7 @@ export default class ObsidianGit extends Plugin {
         await this.loadSettings();
         await this.migrateSettings();
         this.optimizeForMobile();
+        this.optimizeForMobile();
 
         this.settingsTab = new ObsidianGitSettingsTab(this.app, this);
         this.addSettingTab(this.settingsTab);
@@ -339,7 +340,7 @@ export default class ObsidianGit extends Plugin {
     async addFileToGitignore(filePath: string): Promise<void> {
         await this.app.vault.adapter.append(
             this.gitManager.getRelativeVaultPath(".gitignore"),
-            "\\n" + this.gitManager.getRelativeRepoPath(filePath, true)
+            "\\\n" + this.gitManager.getRelativeRepoPath(filePath, true)
         );
         return this.refresh();
     }
@@ -1245,7 +1246,7 @@ I strongly recommend to use "Source mode" for viewing the conflicted files. For 
 \`\`\``,
             ];
         }
-        await this.tools.writeAndOpenFile(lines?.join("\\n"));
+        await this.tools.writeAndOpenFile(lines?.join("\\\n"));
     }
 
     async editRemotes(): Promise<string | undefined> {

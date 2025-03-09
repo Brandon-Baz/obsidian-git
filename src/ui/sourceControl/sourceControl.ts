@@ -47,7 +47,7 @@ export default class GitView extends ItemView implements HoverParent {
                 plugin: this.plugin,
                 view: this,
                 virtualScrolling: true,
-                maxFilesDisplayed: this.plugin.settings.maxFilesDisplayed,
+                maxFilesDisplayed: this.plugin.settings.mobileOptimization.maxFilesToProcess,
             },
         });
     }

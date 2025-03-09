@@ -41,6 +41,62 @@ export class ObsidianGitSettingsTab extends PluginSettingTab {
         return this.plugin.settings;
     }
 
+    private addMobileOptimizationSettings(containerEl: HTMLElement) {
+        new Setting(containerEl)
+            .setName("Enable Mobile Optimization")
+            .setDesc("Optimize plugin performance for mobile devices.")
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(this.settings.mobileOptimization.enable)
+                    .onChange(async (value) => {
+                        this.settings.mobileOptimization.enable = value;
+                        await this.plugin.saveSettings();
+                        this.display();
+                    })
+            );
+
+        new Setting(containerEl)
+            .setName("Max Files to Process")
+            .setDesc("Limit the number of files processed during operations.")
+            .addText((text) =>
+                text
+                    .setValue(String(this.settings.mobileOptimization.maxFilesToProcess))
+                    .onChange(async (value) => {
+                        const numValue = Number(value);
+                        if (!isNaN(numValue)) {
+                            this.settings.mobileOptimization.maxFilesToProcess = numValue;
+                            await this.plugin.saveSettings();
+                        } else {
+                            new Notice("Please enter a valid number.");
+                        }
+                    })
+            );
+
+        new Setting(containerEl)
+            .setName("Aggressive Caching")
+            .setDesc("Enable aggressive caching to improve performance.")
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(this.settings.mobileOptimization.aggressiveCaching)
+                    .onChange(async (value) => {
+                        this.settings.mobileOptimization.aggressiveCaching = value;
+                        await this.plugin.saveSettings();
+                    })
+            );
+
+        new Setting(containerEl)
+            .setName("Disable Resource-Intensive Features")
+            .setDesc("Disable features that consume significant resources.")
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(this.settings.mobileOptimization.disableResourceIntensiveFeatures)
+                    .onChange(async (value) => {
+                        this.settings.mobileOptimization.disableResourceIntensiveFeatures = value;
+                        await this.plugin.saveSettings();
+                    })
+            );
+    }
+
     display(): void {
         const { containerEl } = this;
         const plugin: ObsidianGit = this.plugin;
@@ -727,9 +783,9 @@ export class ObsidianGitSettingsTab extends PluginSettingTab {
                 )
                 .addTextArea((cb) => {
                     cb.setPlaceholder("GIT_DIR=/path/to/git/dir");
-                    cb.setValue(plugin.localStorage.getEnvVars().join("\n"));
+                    cb.setValue(plugin.localStorage.getEnvVars().join("\\n"));
                     cb.onChange((value) => {
-                        plugin.localStorage.setEnvVars(value.split("\n"));
+                        plugin.localStorage.setEnvVars(value.split("\\n"));
                     });
                 });
 
@@ -738,9 +794,9 @@ export class ObsidianGitSettingsTab extends PluginSettingTab {
                 .setName("Additional PATH environment variable paths")
                 .setDesc("Use each line for one path")
                 .addTextArea((cb) => {
-                    cb.setValue(plugin.localStorage.getPATHPaths().join("\n"));
+                    cb.setValue(plugin.localStorage.getPATHPaths().join("\\n"));
                     cb.onChange((value) => {
-                        plugin.localStorage.setPATHPaths(value.split("\n"));
+                        plugin.localStorage.setPATHPaths(value.split("\\n"));
                     });
                 });
         if (plugin.gitManager instanceof SimpleGit)
@@ -851,7 +907,7 @@ export class ObsidianGitSettingsTab extends PluginSettingTab {
             const info = containerEl.createDiv();
             info.setAttr("align", "center");
             info.setText(
-                "Debugging and logging:\nYou can always see the logs of this and every other plugin by opening the console with"
+                "Debugging and logging:\\nYou can always see the logs of this and every other plugin by opening the console with"
             );
             const keys = containerEl.createDiv();
             keys.setAttr("align", "center");
