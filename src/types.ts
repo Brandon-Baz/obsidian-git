@@ -50,6 +50,12 @@ export interface ObsidianGitSettings {
     refreshSourceControlTimer: number;
     showBranchStatusBar: boolean;
     lineAuthor: LineAuthorSettings;
+    mobileOptimization: {
+        enable: boolean;
+        maxFilesProcessed: number;
+        aggressiveCaching: boolean;
+        disableResourceIntensiveFeatures: boolean;
+    };
     setLastSaveToLastCommit: boolean;
     gitDir: string;
     showFileMenu: boolean;

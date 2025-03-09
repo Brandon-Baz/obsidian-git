@@ -46,6 +46,8 @@ export default class GitView extends ItemView implements HoverParent {
             props: {
                 plugin: this.plugin,
                 view: this,
+                virtualScrolling: true,
+                maxFilesDisplayed: this.plugin.settings.maxFilesDisplayed,
             },
         });
     }

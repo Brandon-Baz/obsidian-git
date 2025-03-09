@@ -59,6 +59,22 @@ export default class ObsidianGit extends Plugin {
     tools = new Tools(this);
     localStorage = new LocalStorageSettings(this);
     settings: ObsidianGitSettings;
+
+    optimizeForMobile(): void {
+        if (Platform.isMobileApp) {
+            this.settings.autoSaveInterval = Math.min(
+                this.settings.autoSaveInterval,
+                5
+            ); // Limit auto-save interval to 5 minutes on mobile
+            this.settings.lineAuthor.show = false; // Disable line authoring on mobile
+            this.settings.refreshSourceControlTimer = Math.max(
+                this.settings.refreshSourceControlTimer,
+                30000
+            ); // Increase refresh timer to 30 seconds
+            this.settings.changedFilesInStatusBar = false; // Disable changed files in status bar
+            this.log("Mobile optimizations applied.");
+        }
+    }
     settingsTab?: ObsidianGitSettingsTab;
     statusBar?: StatusBar;
     branchBar?: BranchStatusBar;
@@ -143,6 +159,7 @@ export default class ObsidianGit extends Plugin {
         this.localStorage.migrate();
         await this.loadSettings();
         await this.migrateSettings();
+        this.optimizeForMobile();
 
         this.settingsTab = new ObsidianGitSettingsTab(this.app, this);
         this.addSettingTab(this.settingsTab);
@@ -322,7 +339,7 @@ export default class ObsidianGit extends Plugin {
     async addFileToGitignore(filePath: string): Promise<void> {
         await this.app.vault.adapter.append(
             this.gitManager.getRelativeVaultPath(".gitignore"),
-            "\n" + this.gitManager.getRelativeRepoPath(filePath, true)
+            "\\n" + this.gitManager.getRelativeRepoPath(filePath, true)
         );
         return this.refresh();
     }
@@ -1228,7 +1245,7 @@ I strongly recommend to use "Source mode" for viewing the conflicted files. For 
 \`\`\``,
             ];
         }
-        await this.tools.writeAndOpenFile(lines?.join("\n"));
+        await this.tools.writeAndOpenFile(lines?.join("\\n"));
     }
 
     async editRemotes(): Promise<string | undefined> {

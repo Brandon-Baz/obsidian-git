@@ -58,6 +58,12 @@ export const DEFAULT_SETTINGS: Omit<ObsidianGitSettings, "autoCommitMessage"> =
             ignoreWhitespace: false,
             gutterSpacingFallbackLength: 5,
         },
+        mobileOptimization: {
+            enable: false,
+            maxFilesToProcess: 1000,
+            aggressiveCaching: true,
+            disableResourceIntensiveFeatures: true,
+        },
     };
 
 export const SOURCE_CONTROL_VIEW_CONFIG = {
